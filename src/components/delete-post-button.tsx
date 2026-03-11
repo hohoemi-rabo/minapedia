@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import { deletePost } from "@/app/(main)/posts/[id]/actions";
 
-export function DeletePostButton({ postId }: { postId: number }) {
+export function DeletePostButton({ postId }: { postId: string }) {
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {

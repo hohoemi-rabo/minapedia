@@ -1,6 +1,7 @@
 # 12: 管理画面 — おすすめ固定表示
 
 > マイルストーン: M4 | 優先度: 中
+> Status: DONE
 
 ## 概要
 
@@ -15,7 +16,7 @@
 
 ## Todo
 
-- [ ] `/admin/featured` おすすめ管理ページ
-- [ ] 現在のおすすめ一覧表示（is_featured = true）
-- [ ] おすすめ追加/解除 Server Action（最大3件バリデーション）
-- [ ] published 投稿の検索・選択UI
+- [x] `/admin/featured` おすすめ管理ページ
+- [x] 現在のおすすめ一覧表示（is_featured = true）
+- [x] おすすめ追加/解除 Server Action（最大3件バリデーション）
+- [x] published 投稿の検索・選択UI

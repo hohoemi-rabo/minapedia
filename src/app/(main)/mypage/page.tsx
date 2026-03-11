@@ -72,11 +72,19 @@ export default async function MyPage() {
               const badge = STATUS_BADGE[post.status] ?? STATUS_BADGE.pending;
               return (
                 <div key={post.id}>
-                  <span
-                    className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${badge.className}`}
-                  >
-                    {badge.label}
-                  </span>
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${badge.className}`}
+                    >
+                      {badge.label}
+                    </span>
+                    <Link
+                      href={`/posts/${post.id}/edit`}
+                      className="text-sm font-medium text-blue-600 hover:text-blue-800"
+                    >
+                      編集する
+                    </Link>
+                  </div>
                   <div className="mt-1">
                     <PostCard post={post} />
                   </div>

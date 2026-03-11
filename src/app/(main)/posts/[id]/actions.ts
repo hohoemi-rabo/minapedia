@@ -8,7 +8,7 @@ export type PostFormState = {
   message: string;
 } | undefined;
 
-export async function deletePost(postId: number) {
+export async function deletePost(postId: string) {
   const supabase = await createClient();
 
   const {
@@ -73,7 +73,7 @@ export async function updatePost(
     return { message: "ログインしてください。" };
   }
 
-  const postId = Number(formData.get("post_id"));
+  const postId = formData.get("post_id") as string;
   const categoryId = formData.get("category_id") as string;
   const title = (formData.get("title") as string)?.trim();
   const spotName = (formData.get("spot_name") as string)?.trim() || null;
@@ -196,7 +196,7 @@ export async function updatePost(
 
 export type ReactionType = "suteki" | "ikitai" | "sanko";
 
-export async function toggleReaction(postId: number, type: ReactionType) {
+export async function toggleReaction(postId: string, type: ReactionType) {
   const supabase = await createClient();
 
   const {

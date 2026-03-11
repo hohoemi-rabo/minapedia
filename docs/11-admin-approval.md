@@ -1,6 +1,7 @@
 # 11: 管理画面 — 投稿承認
 
 > マイルストーン: M4 | 優先度: 高
+> Status: DONE
 
 ## 概要
 
@@ -17,10 +18,10 @@
 
 ## Todo
 
-- [ ] `/admin` レイアウト作成（admin ロールチェック）
-- [ ] `/admin/posts` 投稿管理ページ
-- [ ] pending 投稿一覧（優先表示）
-- [ ] 投稿プレビュー表示
-- [ ] 承認 Server Action（pending → published）
-- [ ] 差し戻し/非表示 Server Action（→ hidden）
-- [ ] ステータス変更後の revalidatePath
+- [x] `/admin` レイアウト作成（admin ロールチェック）
+- [x] `/admin/posts` 投稿管理ページ
+- [x] pending 投稿一覧（優先表示）
+- [x] 投稿プレビュー表示
+- [x] 承認 Server Action（pending → published）
+- [x] 差し戻し/非表示 Server Action（→ hidden）
+- [x] ステータス変更後の revalidatePath

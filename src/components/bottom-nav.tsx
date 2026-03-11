@@ -9,8 +9,12 @@ const NAV_ITEMS = [
   { href: "/mypage", label: "マイページ", icon: "👤" },
 ] as const;
 
-export function BottomNav() {
+const ADMIN_ITEM = { href: "/admin", label: "管理", icon: "🔧" };
+
+export function BottomNav({ isAdmin = false }: { isAdmin?: boolean }) {
   const pathname = usePathname();
+
+  const items = isAdmin ? [...NAV_ITEMS, ADMIN_ITEM] : NAV_ITEMS;
 
   return (
     <nav
@@ -18,7 +22,7 @@ export function BottomNav() {
       aria-label="メインナビゲーション"
     >
       <div className="mx-auto flex max-w-lg items-center justify-around">
-        {NAV_ITEMS.map(({ href, label, icon }) => {
+        {items.map(({ href, label, icon }) => {
           const isActive =
             href === "/" ? pathname === "/" : pathname.startsWith(href);
 

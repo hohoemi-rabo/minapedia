@@ -22,7 +22,22 @@ type DefaultValues = {
   post_images: { storage_path: string; order_index: number }[];
 };
 
-const AREAS = ["飯田市", "高森町", "阿智村", "松川町", "その他"] as const;
+const AREAS = [
+  "飯田市",
+  "松川町",
+  "高森町",
+  "阿南町",
+  "阿智村",
+  "平谷村",
+  "根羽村",
+  "下條村",
+  "売木村",
+  "天龍村",
+  "泰阜村",
+  "喬木村",
+  "豊丘村",
+  "大鹿村",
+] as const;
 
 const inputClass =
   "mt-2 block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-lg text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500";
@@ -70,12 +85,6 @@ export function PostForm({
         {mode === "edit" && postId && (
           <input type="hidden" name="post_id" value={postId} />
         )}
-
-        {/* 写真 */}
-        <ImageInput
-          disabled={pending}
-          existingImages={defaultValues?.post_images}
-        />
 
         {/* テーマ選択 */}
         <fieldset>
@@ -182,6 +191,12 @@ export function PostForm({
             placeholder="例: また春にも行ってみたいです"
           />
         </div>
+
+        {/* 写真 */}
+        <ImageInput
+          disabled={pending}
+          existingImages={defaultValues?.post_images}
+        />
 
         {/* 送信ボタン */}
         <button

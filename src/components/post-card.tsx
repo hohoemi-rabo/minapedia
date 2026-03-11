@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getPublicImageUrl } from "@/lib/supabase/storage";
 
 export type Post = {
-  id: number;
+  id: string;
   title: string;
   spot_name: string | null;
   area: string | null;

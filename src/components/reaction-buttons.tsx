@@ -8,12 +8,14 @@ import {
 
 const REACTION_CONFIG: {
   type: ReactionType;
+  icon: string;
   label: string;
   activeColor: string;
+  activeIconColor: string;
 }[] = [
-  { type: "suteki", label: "すてき", activeColor: "bg-pink-100 text-pink-700 border-pink-300" },
-  { type: "ikitai", label: "行ってみたい", activeColor: "bg-blue-100 text-blue-700 border-blue-300" },
-  { type: "sanko", label: "参考になった", activeColor: "bg-green-100 text-green-700 border-green-300" },
+  { type: "suteki", icon: "♥", label: "すてき", activeColor: "bg-pink-50 border-pink-300", activeIconColor: "text-pink-600" },
+  { type: "ikitai", icon: "📍", label: "行ってみたい", activeColor: "bg-blue-50 border-blue-300", activeIconColor: "text-blue-600" },
+  { type: "sanko", icon: "💡", label: "参考になった", activeColor: "bg-green-50 border-green-300", activeIconColor: "text-green-600" },
 ];
 
 type ReactionState = {
@@ -26,7 +28,7 @@ export function ReactionButtons({
   postId,
   reactions,
 }: {
-  postId: number;
+  postId: string;
   reactions: ReactionState;
 }) {
   const [optimisticReactions, addOptimistic] = useOptimistic(
@@ -63,15 +65,20 @@ export function ReactionButtons({
             key={config.type}
             type="button"
             onClick={() => handleToggle(config.type)}
-            className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-base font-medium transition-colors ${
+            className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-base font-medium transition-colors ${
               isActive
                 ? config.activeColor
-                : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+                : "border-gray-200 bg-white hover:bg-gray-50"
             }`}
           >
-            {config.label}
+            <span className={`text-xl ${isActive ? config.activeIconColor : "grayscale opacity-60"}`}>
+              {config.icon}
+            </span>
+            <span className={isActive ? "text-gray-900" : "text-gray-500"}>
+              {config.label}
+            </span>
             {count > 0 && (
-              <span className="text-sm opacity-70">{count}</span>
+              <span className={`text-sm font-bold ${isActive ? "text-gray-700" : "text-gray-400"}`}>{count}</span>
             )}
           </button>
         );
