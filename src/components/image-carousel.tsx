@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { getPublicImageUrl } from "@/lib/supabase/storage";
 
@@ -10,7 +10,10 @@ type ImageCarouselProps = {
 };
 
 export function ImageCarousel({ images, alt }: ImageCarouselProps) {
-  const sorted = [...images].sort((a, b) => a.order_index - b.order_index);
+  const sorted = useMemo(
+    () => [...images].sort((a, b) => a.order_index - b.order_index),
+    [images]
+  );
   const [current, setCurrent] = useState(0);
   const touchStartX = useRef(0);
 

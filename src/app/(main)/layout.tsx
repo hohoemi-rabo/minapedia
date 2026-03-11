@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { getProfile } from "@/lib/auth";
 import { BottomNav } from "@/components/bottom-nav";
 
 export default async function MainLayout({
@@ -6,20 +6,8 @@ export default async function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  let isAdmin = false;
-  if (user) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
-    isAdmin = profile?.role === "admin";
-  }
+  const profile = await getProfile();
+  const isAdmin = profile?.role === "admin";
 
   return (
     <div className="mx-auto min-h-screen max-w-lg">

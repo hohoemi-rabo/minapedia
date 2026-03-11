@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import imageCompression from "browser-image-compression";
 import { Avatar } from "@/components/avatar";
 
 const COMPRESSION_OPTIONS = {
@@ -33,6 +32,7 @@ export function AvatarInput({
 
     setCompressing(true);
     try {
+      const { default: imageCompression } = await import("browser-image-compression");
       const compressed = await imageCompression(file, COMPRESSION_OPTIONS);
       const url = URL.createObjectURL(compressed);
       setPreviewUrl(url);

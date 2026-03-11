@@ -63,19 +63,18 @@ export async function updateProfile(
         return { message: "アイコン画像は5MB以下にしてください。" };
       }
 
-      // 古いファイルを先に削除
-      if (oldAvatarPath) {
-        await supabase.storage.from("avatars").remove([oldAvatarPath]);
-      }
-
       // タイムスタンプ付きファイル名でキャッシュ問題を回避
       const storagePath = `${user.id}/${Date.now()}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(storagePath, avatarFile, {
-          contentType: avatarFile.type,
-        });
+      // 古いファイル削除と新ファイルアップロードを並列実行
+      const [, { error: uploadError }] = await Promise.all([
+        oldAvatarPath
+          ? supabase.storage.from("avatars").remove([oldAvatarPath])
+          : Promise.resolve(),
+        supabase.storage
+          .from("avatars")
+          .upload(storagePath, avatarFile, { contentType: avatarFile.type }),
+      ]);
 
       if (uploadError) {
         return { message: "アイコンのアップロードに失敗しました。もう一度お試しください。" };

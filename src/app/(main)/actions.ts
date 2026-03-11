@@ -1,18 +1,16 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-
-const POST_SELECT =
-  "id, title, spot_name, area, body_good, body_memo, created_at, profiles(nickname, avatar_url), categories(name, icon, color), post_images(storage_path, order_index), reactions(type, user_id)";
+import { POST_SELECT } from "@/lib/constants";
 
 export async function fetchPosts({
-  offset,
   limit,
   categoryId,
+  cursor,
 }: {
-  offset: number;
   limit: number;
   categoryId?: number;
+  cursor?: string;
 }) {
   const supabase = await createClient();
 
@@ -25,10 +23,15 @@ export async function fetchPosts({
     .select(POST_SELECT)
     .eq("status", "published")
     .order("created_at", { ascending: false })
-    .range(offset, offset + limit - 1);
+    .limit(limit);
 
   if (categoryId) {
     query = query.eq("category_id", categoryId);
+  }
+
+  // カーソルベースページネーション: 前回の最後のcreated_atより古い投稿を取得
+  if (cursor) {
+    query = query.lt("created_at", cursor);
   }
 
   const { data: posts, error } = await query;

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import imageCompression from "browser-image-compression";
 import { getPublicImageUrl } from "@/lib/supabase/storage";
 
 const MAX_IMAGES = 3;
@@ -57,6 +56,7 @@ export function ImageInput({
     setCompressing(true);
 
     try {
+      const { default: imageCompression } = await import("browser-image-compression");
       const compressed = await Promise.all(
         filesToProcess.map(async (file) => {
           const compressedFile = await imageCompression(

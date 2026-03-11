@@ -51,4 +51,7 @@ export function PostForm() {
 
 - **メタデータ**: Metadata API (`export const metadata` / `generateMetadata`) でSEO対応
 - **Layouts**: 共通UIはlayoutに配置し、ナビゲーション時の部分レンダリングを活用
-- **フォント**: `next/font` で Geist フォントをセルフホスト（設定済み）
+- **フォント**: `next/font` で M PLUS Rounded 1c をセルフホスト（設定済み）
+- **React.cache()**: `src/lib/auth.ts` で認証・プロフィール取得をリクエスト内デデュプリケーション
+- **Promise.all()**: 独立したデータフェッチを並列実行（ウォーターフォール排除）
+- **動的import**: 重いライブラリ（`browser-image-compression`）は使用時に動的import

@@ -36,7 +36,6 @@ export function PostFeed({
     setSelectedCategory(categoryId);
     startTransition(async () => {
       const result = await fetchPosts({
-        offset: 0,
         limit: POSTS_PER_PAGE,
         categoryId: categoryId ?? undefined,
       });
@@ -47,10 +46,11 @@ export function PostFeed({
 
   const handleLoadMore = () => {
     startTransition(async () => {
+      const lastPost = posts[posts.length - 1];
       const result = await fetchPosts({
-        offset: posts.length,
         limit: POSTS_PER_PAGE,
         categoryId: selectedCategory ?? undefined,
+        cursor: lastPost?.created_at,
       });
       setPosts((prev) => [...prev, ...(result.posts as PostWithHeart[])]);
       setHasMore(result.hasMore);

@@ -1,46 +1,38 @@
 import { createClient } from "@/lib/supabase/server";
+import { getAuthUser, getProfile } from "@/lib/auth";
 import { PostCard } from "@/components/post-card";
 import { PostFeed } from "@/components/post-feed";
-
-const POST_SELECT =
-  "id, title, spot_name, area, body_good, body_memo, created_at, profiles(nickname, avatar_url), categories(name, icon, color), post_images(storage_path, order_index), reactions(type, user_id)";
-const POSTS_PER_PAGE = 5;
+import { POST_SELECT, POSTS_PER_PAGE } from "@/lib/constants";
 
 export default async function HomePage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const [user, profile] = await Promise.all([getAuthUser(), getProfile()]);
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("nickname, role")
-    .eq("id", user!.id)
-    .single();
-
-  // 先生おすすめ投稿（最大3件）
-  const { data: featuredPosts } = await supabase
-    .from("posts")
-    .select(POST_SELECT)
-    .eq("status", "published")
-    .eq("is_featured", true)
-    .order("created_at", { ascending: false })
-    .limit(3);
-
-  // 新着投稿（初期5件）
-  const { data: initialPosts } = await supabase
-    .from("posts")
-    .select(POST_SELECT)
-    .eq("status", "published")
-    .order("created_at", { ascending: false })
-    .limit(POSTS_PER_PAGE);
-
-  // カテゴリ一覧
-  const { data: categories } = await supabase
-    .from("categories")
-    .select("id, name, icon, color")
-    .eq("phase", 1)
-    .order("id");
+  // 3つのクエリを並列実行
+  const [{ data: featuredPosts }, { data: initialPosts }, { data: categories }] =
+    await Promise.all([
+      // 先生おすすめ投稿（最大3件）
+      supabase
+        .from("posts")
+        .select(POST_SELECT)
+        .eq("status", "published")
+        .eq("is_featured", true)
+        .order("created_at", { ascending: false })
+        .limit(3),
+      // 新着投稿（初期5件）
+      supabase
+        .from("posts")
+        .select(POST_SELECT)
+        .eq("status", "published")
+        .order("created_at", { ascending: false })
+        .limit(POSTS_PER_PAGE),
+      // カテゴリ一覧
+      supabase
+        .from("categories")
+        .select("id, name, icon, color")
+        .eq("phase", 1)
+        .order("id"),
+    ]);
 
   const posts = (initialPosts ?? []).map((post) => {
     const hearts = (post.reactions ?? []).filter((r) => r.type === "suteki");

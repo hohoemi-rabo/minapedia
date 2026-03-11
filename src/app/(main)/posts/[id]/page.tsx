@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/auth";
 import { ImageCarousel } from "@/components/image-carousel";
 import { DeletePostButton } from "@/components/delete-post-button";
 
@@ -12,17 +13,17 @@ export default async function PostDetailPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: post } = await supabase
-    .from("posts")
-    .select(
-      "id, user_id, title, spot_name, area, body_good, body_memo, status, created_at, profiles(nickname), categories(name, icon, color), post_images(storage_path, order_index)"
-    )
-    .eq("id", id)
-    .single();
+  // ユーザー取得と投稿取得を並列実行
+  const [user, { data: post }] = await Promise.all([
+    getAuthUser(),
+    supabase
+      .from("posts")
+      .select(
+        "id, user_id, title, spot_name, area, body_good, body_memo, status, created_at, profiles(nickname), categories(name, icon, color), post_images(storage_path, order_index)"
+      )
+      .eq("id", id)
+      .single(),
+  ]);
 
   if (!post) {
     notFound();

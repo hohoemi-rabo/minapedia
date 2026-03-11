@@ -5,25 +5,27 @@ import { AdminPostActions } from "@/components/admin-post-actions";
 export default async function AdminFeaturedPage() {
   const supabase = await createClient();
 
-  // 現在のおすすめ投稿
-  const { data: featuredPosts } = await supabase
-    .from("posts")
-    .select(
-      "id, title, status, is_featured, created_at, profiles(nickname), categories(name, icon)"
-    )
-    .eq("is_featured", true)
-    .order("created_at", { ascending: false });
-
-  // おすすめ候補（published かつ非おすすめ）
-  const { data: candidatePosts } = await supabase
-    .from("posts")
-    .select(
-      "id, title, status, is_featured, created_at, profiles(nickname), categories(name, icon)"
-    )
-    .eq("status", "published")
-    .eq("is_featured", false)
-    .order("created_at", { ascending: false })
-    .limit(20);
+  // 2つのクエリを並列実行
+  const [{ data: featuredPosts }, { data: candidatePosts }] = await Promise.all([
+    // 現在のおすすめ投稿
+    supabase
+      .from("posts")
+      .select(
+        "id, title, status, is_featured, created_at, profiles(nickname), categories(name, icon)"
+      )
+      .eq("is_featured", true)
+      .order("created_at", { ascending: false }),
+    // おすすめ候補（published かつ非おすすめ）
+    supabase
+      .from("posts")
+      .select(
+        "id, title, status, is_featured, created_at, profiles(nickname), categories(name, icon)"
+      )
+      .eq("status", "published")
+      .eq("is_featured", false)
+      .order("created_at", { ascending: false })
+      .limit(20),
+  ]);
 
   const featured = featuredPosts ?? [];
   const candidates = candidatePosts ?? [];

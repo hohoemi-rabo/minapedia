@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getAuthUser, getProfile } from "@/lib/auth";
 import { logout } from "@/app/(auth)/login/actions";
 import { PostCard } from "@/components/post-card";
 import { Avatar } from "@/components/avatar";
@@ -20,17 +21,11 @@ const STATUS_BADGE: Record<string, { label: string; className: string }> = {
 };
 
 export default async function MyPage() {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("nickname, role, avatar_url")
-    .eq("id", user!.id)
-    .single();
+  const [supabase, user, profile] = await Promise.all([
+    createClient(),
+    getAuthUser(),
+    getProfile(),
+  ]);
 
   const { data: posts } = await supabase
     .from("posts")

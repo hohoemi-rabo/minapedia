@@ -42,12 +42,25 @@ npm run lint         # ESLint実行 (eslint)
 
 - `posts.id` は UUID（string型）。Number() キャストは禁止
 - Supabase JOIN はオブジェクトまたは配列を返すため、`Array.isArray()` で分岐が必要
-- 画像圧縮は `browser-image-compression` でクライアント側実施
+- 画像圧縮は `browser-image-compression` でクライアント側実施（動的importでバンドル最適化）
 - アバター画像はタイムスタンプ付きファイル名（`user_id/{timestamp}`）でキャッシュ問題を回避
 - Supabase Storage バケット: `post-images`（投稿画像）、`avatars`（アバター画像）
 - Server Actions body上限: 5MB（`next.config.ts` で設定）
 - Supabase project ID: `slfdutaanuoswrofcomv`
 - エリア選択: 南信州14市町村（飯田市, 松川町, 高森町, 阿南町, 阿智村, 平谷村, 根羽村, 下條村, 売木村, 天龍村, 泰阜村, 喬木村, 豊丘村, 大鹿村）
+
+## Performance Patterns
+
+- `React.cache()` で認証・プロフィール取得をリクエスト内デデュプリケーション（`src/lib/auth.ts`）
+- `Promise.all()` で独立したクエリを並列実行（ページコンポーネント、Server Actions）
+- 共通SELECT文は `src/lib/constants.ts` の `POST_SELECT` 定数を使用
+- カーソルベースページネーション（`created_at` で `.lt()` フィルタ、OFFSET不使用）
+- `browser-image-compression` は動的 import（バンドルサイズ最適化）
+
+## Database Functions
+
+- `toggle_reaction(p_post_id, p_type)` — リアクションのアトミックなトグル（DELETE→INSERT、レースコンディション防止）
+- `is_admin()` — 管理者判定ヘルパー（RLSポリシーで使用、SECURITY DEFINER）
 
 ## Ticket Management
 

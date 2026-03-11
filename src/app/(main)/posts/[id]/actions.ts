@@ -30,7 +30,7 @@ export async function deletePost(postId: string) {
     return { message: "この投稿を削除する権限がありません。" };
   }
 
-  // Storage の画像を削除
+  // Storage画像を削除（DBレコードはCASCADEで自動削除）
   const { data: images } = await supabase
     .from("post_images")
     .select("storage_path")
@@ -42,10 +42,7 @@ export async function deletePost(postId: string) {
       .remove(images.map((img) => img.storage_path));
   }
 
-  // post_images 削除（CASCADE設定がない場合の保険）
-  await supabase.from("post_images").delete().eq("post_id", postId);
-
-  // 投稿削除
+  // 投稿削除（post_images, reactions は CASCADE で自動削除）
   const { error } = await supabase.from("posts").delete().eq("id", postId);
 
   if (error) {
@@ -150,16 +147,18 @@ export async function updatePost(
     return { message: "更新に失敗しました。もう一度お試しください。" };
   }
 
-  // 削除対象の画像をStorage + DBから削除
+  // 削除対象の画像をStorage + DBから並列削除
   if (deletedImagePaths.length > 0) {
-    await supabase.storage.from("post-images").remove(deletedImagePaths);
-    for (const path of deletedImagePaths) {
-      await supabase
-        .from("post_images")
-        .delete()
-        .eq("post_id", postId)
-        .eq("storage_path", path);
-    }
+    await Promise.all([
+      supabase.storage.from("post-images").remove(deletedImagePaths),
+      ...deletedImagePaths.map((path) =>
+        supabase
+          .from("post_images")
+          .delete()
+          .eq("post_id", postId)
+          .eq("storage_path", path)
+      ),
+    ]);
   }
 
   // 新しい画像をアップロード
@@ -207,27 +206,13 @@ export async function toggleReaction(postId: string, type: ReactionType) {
     return { reacted: false };
   }
 
-  // 既存リアクションを確認
-  const { data: existing } = await supabase
-    .from("reactions")
-    .select("id")
-    .eq("post_id", postId)
-    .eq("user_id", user.id)
-    .eq("type", type)
-    .single();
-
-  if (existing) {
-    await supabase.from("reactions").delete().eq("id", existing.id);
-    revalidatePath(`/posts/${postId}`);
-    return { reacted: false };
-  }
-
-  await supabase.from("reactions").insert({
-    post_id: postId,
-    user_id: user.id,
-    type,
+  // DB関数でアトミックにトグル（レースコンディション防止）
+  const { data: reacted } = await supabase.rpc("toggle_reaction", {
+    p_post_id: postId,
+    p_type: type,
   });
 
+  revalidatePath("/");
   revalidatePath(`/posts/${postId}`);
-  return { reacted: true };
+  return { reacted: reacted ?? false };
 }
