@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
 import { getPublicImageUrl } from "@/lib/supabase/storage";
 import { HeartButton } from "@/components/heart-button";
+import { PostCardDetail } from "@/components/post-card-detail";
 
 export type Post = {
   id: string;
@@ -32,8 +32,8 @@ export function PostCard({ post, heartReacted = false, heartCount = 0 }: PostCar
 
   return (
     <article className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-      {/* 画像 or テーマアイコン背景 */}
-      {firstImage ? (
+      {/* 画像（ある場合のみ表示） */}
+      {firstImage && (
         <div className="relative aspect-[16/9] w-full">
           <Image
             src={getPublicImageUrl(firstImage.storage_path)}
@@ -42,13 +42,6 @@ export function PostCard({ post, heartReacted = false, heartCount = 0 }: PostCar
             sizes="(max-width: 512px) 100vw, 512px"
             className="object-cover"
           />
-        </div>
-      ) : (
-        <div
-          className="flex aspect-[16/9] w-full items-center justify-center"
-          style={{ backgroundColor: category.color }}
-        >
-          <span className="text-6xl">{category.icon}</span>
         </div>
       )}
 
@@ -82,20 +75,20 @@ export function PostCard({ post, heartReacted = false, heartCount = 0 }: PostCar
         {/* 投稿者 */}
         <p className="mt-1 text-sm text-gray-500">{profile.nickname}</p>
 
-        {/* 本文プレビュー */}
+        {/* 本文プレビュー（閉じている時だけ表示） */}
         {previewText && (
           <p className="mt-2 line-clamp-2 text-base text-gray-700">
             {previewText}
           </p>
         )}
 
-        {/* 続きを読む */}
-        <Link
-          href={`/posts/${post.id}`}
-          className="mt-3 inline-block text-base font-medium text-blue-600 hover:text-blue-800"
-        >
-          続きを読む →
-        </Link>
+        {/* 続きを読む → その場で展開 */}
+        <PostCardDetail
+          spotName={post.spot_name}
+          bodyGood={post.body_good}
+          bodyMemo={post.body_memo}
+          images={sortedImages}
+        />
       </div>
     </article>
   );

@@ -61,35 +61,36 @@ export function PostFeed({
     <section className="mt-8">
       {/* テーマフィルタ */}
       <h2 className="text-xl font-bold">テーマで絞る</h2>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-3 grid grid-cols-3 gap-2">
         <button
           type="button"
           onClick={() => handleCategoryChange(null)}
-          className={`rounded-full px-4 py-2 text-base font-medium transition-colors ${
+          className={`flex items-center justify-center rounded-full border-2 px-2 py-2.5 text-sm font-medium transition-colors ${
             selectedCategory === null
-              ? "bg-gray-900 text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              ? "border-blue-500 bg-blue-50 font-bold"
+              : "border-gray-200 bg-white hover:border-gray-300"
           }`}
         >
-          すべて
+          <span className="text-gray-900">すべて</span>
         </button>
         {categories.map((cat) => (
           <button
             key={cat.id}
             type="button"
             onClick={() => handleCategoryChange(cat.id)}
-            className={`rounded-full px-4 py-2 text-base font-medium transition-colors ${
+            className={`flex items-center gap-1.5 rounded-full border-2 px-2 py-2.5 text-sm font-medium transition-colors ${
               selectedCategory === cat.id
-                ? "text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                ? "border-blue-500 bg-blue-50 font-bold"
+                : "border-gray-200 bg-white hover:border-gray-300"
             }`}
-            style={
-              selectedCategory === cat.id
-                ? { backgroundColor: cat.color }
-                : undefined
-            }
           >
-            {cat.icon} {cat.name}
+            <span
+              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs"
+              style={{ backgroundColor: cat.color }}
+            >
+              {cat.icon}
+            </span>
+            <span className="text-gray-900">{cat.name}</span>
           </button>
         ))}
       </div>

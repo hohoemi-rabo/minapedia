@@ -40,7 +40,7 @@ const AREAS = [
 ] as const;
 
 const inputClass =
-  "mt-2 block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-lg text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500";
+  "mt-2 block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-lg text-gray-900 placeholder:text-gray-200 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500";
 
 export function PostForm({
   categories,
@@ -103,7 +103,12 @@ export function PostForm({
                     : "border-gray-200 bg-white hover:border-gray-300"
                 }`}
               >
-                <span className="text-xl">{cat.icon}</span>
+                <span
+                  className="flex h-8 w-8 items-center justify-center rounded-full text-lg"
+                  style={{ backgroundColor: cat.color }}
+                >
+                  {cat.icon}
+                </span>
                 <span className="text-gray-900">{cat.name}</span>
               </button>
             ))}
