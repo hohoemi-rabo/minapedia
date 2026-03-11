@@ -14,7 +14,7 @@ export default async function HomePage() {
     .single();
 
   return (
-    <div className="mx-auto max-w-md px-4 py-8">
+    <div>
       <h1 className="text-2xl font-bold">Minapedia</h1>
       <p className="mt-2 text-lg text-gray-600">
         ようこそ、{profile?.nickname ?? "ユーザー"}さん！

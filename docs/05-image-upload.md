@@ -1,6 +1,7 @@
 # 05: 写真アップロード
 
 > マイルストーン: M2 | 優先度: 高
+> Status: DONE
 
 ## 概要
 
@@ -15,10 +16,10 @@
 
 ## Todo
 
-- [ ] `browser-image-compression` パッケージ導入
-- [ ] 画像プレビュー付きアップロードコンポーネント作成（Client Component）
-- [ ] クライアント側画像圧縮処理
-- [ ] Supabase Storage へのアップロード処理
-- [ ] post_images テーブルへの記録（投稿作成 Server Action に統合）
-- [ ] 3枚上限のバリデーション
-- [ ] アップロード中のローディング表示
+- [x] `browser-image-compression` パッケージ導入
+- [x] 画像プレビュー付きアップロードコンポーネント作成（Client Component）
+- [x] クライアント側画像圧縮処理
+- [x] Supabase Storage へのアップロード処理
+- [x] post_images テーブルへの記録（投稿作成 Server Action に統合）
+- [x] 3枚上限のバリデーション
+- [x] アップロード中のローディング表示
