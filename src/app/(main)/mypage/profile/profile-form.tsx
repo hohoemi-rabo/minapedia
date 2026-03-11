@@ -5,11 +5,18 @@ import {
   updateProfile,
   type ProfileFormState,
 } from "./actions";
+import { AvatarInput } from "@/components/avatar-input";
 
 const inputClass =
-  "mt-2 block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-lg text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500";
+  "mt-2 block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-lg text-gray-900 placeholder:text-gray-200 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500";
 
-export function ProfileForm({ nickname }: { nickname: string }) {
+export function ProfileForm({
+  nickname,
+  avatarUrl,
+}: {
+  nickname: string;
+  avatarUrl: string | null;
+}) {
   const [state, action, pending] = useActionState<ProfileFormState, FormData>(
     updateProfile,
     undefined
@@ -26,6 +33,13 @@ export function ProfileForm({ nickname }: { nickname: string }) {
           {state.message}
         </div>
       )}
+
+      {/* アバター */}
+      <AvatarInput
+        nickname={nickname}
+        currentAvatarUrl={avatarUrl}
+        disabled={pending}
+      />
 
       <div>
         <label

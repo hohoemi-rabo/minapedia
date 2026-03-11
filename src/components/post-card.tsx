@@ -2,6 +2,9 @@ import Image from "next/image";
 import { getPublicImageUrl } from "@/lib/supabase/storage";
 import { HeartButton } from "@/components/heart-button";
 import { PostCardDetail } from "@/components/post-card-detail";
+import { Avatar } from "@/components/avatar";
+
+type Profile = { nickname: string; avatar_url?: string | null };
 
 export type Post = {
   id: string;
@@ -11,7 +14,7 @@ export type Post = {
   body_good: string | null;
   body_memo: string | null;
   created_at: string;
-  profiles: { nickname: string } | { nickname: string }[];
+  profiles: Profile | Profile[];
   categories: { name: string; icon: string; color: string } | { name: string; icon: string; color: string }[];
   post_images: { storage_path: string; order_index: number }[];
 };
@@ -73,7 +76,14 @@ export function PostCard({ post, heartReacted = false, heartCount = 0 }: PostCar
         <h2 className="mt-3 text-xl font-bold text-gray-900">{post.title}</h2>
 
         {/* 投稿者 */}
-        <p className="mt-1 text-sm text-gray-500">{profile.nickname}</p>
+        <div className="mt-1 flex items-center gap-2">
+          <Avatar
+            nickname={profile.nickname}
+            avatarUrl={profile.avatar_url ?? null}
+            size="sm"
+          />
+          <p className="text-sm text-gray-500">{profile.nickname}</p>
+        </div>
 
         {/* 本文プレビュー（閉じている時だけ表示） */}
         {previewText && (

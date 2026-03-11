@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { logout } from "@/app/(auth)/login/actions";
 import { PostCard } from "@/components/post-card";
+import { Avatar } from "@/components/avatar";
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   pending: {
@@ -27,14 +28,14 @@ export default async function MyPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("nickname, role")
+    .select("nickname, role, avatar_url")
     .eq("id", user!.id)
     .single();
 
   const { data: posts } = await supabase
     .from("posts")
     .select(
-      "id, title, spot_name, area, body_good, body_memo, status, created_at, profiles(nickname), categories(name, icon, color), post_images(storage_path, order_index)"
+      "id, title, spot_name, area, body_good, body_memo, status, created_at, profiles(nickname, avatar_url), categories(name, icon, color), post_images(storage_path, order_index)"
     )
     .eq("user_id", user!.id)
     .order("created_at", { ascending: false });
@@ -43,11 +44,18 @@ export default async function MyPage() {
     <div>
       {/* プロフィールヘッダー */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">
-            {profile?.nickname ?? "ユーザー"}
-          </h1>
-          <p className="mt-1 text-sm text-gray-500">マイページ</p>
+        <div className="flex items-center gap-3">
+          <Avatar
+            nickname={profile?.nickname ?? "?"}
+            avatarUrl={profile?.avatar_url ?? null}
+            size="md"
+          />
+          <div>
+            <h1 className="text-2xl font-bold">
+              {profile?.nickname ?? "ユーザー"}
+            </h1>
+            <p className="mt-1 text-sm text-gray-500">マイページ</p>
+          </div>
         </div>
         <Link
           href="/mypage/profile"

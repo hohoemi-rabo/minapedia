@@ -15,7 +15,7 @@ export default async function ProfileEditPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("nickname")
+    .select("nickname, avatar_url")
     .eq("id", user.id)
     .single();
 
@@ -30,7 +30,10 @@ export default async function ProfileEditPage() {
       </div>
 
       <div className="mt-6">
-        <ProfileForm nickname={profile?.nickname ?? ""} />
+        <ProfileForm
+          nickname={profile?.nickname ?? ""}
+          avatarUrl={profile?.avatar_url ?? null}
+        />
       </div>
     </div>
   );
