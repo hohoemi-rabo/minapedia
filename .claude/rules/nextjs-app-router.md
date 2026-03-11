@@ -1,5 +1,5 @@
 ---
-globs: ["src/app/**", "next.config.ts", "src/middleware.ts"]
+paths: ["src/app/**", "next.config.ts", "src/middleware.ts"]
 ---
 
 # Next.js 15 App Router ベストプラクティス

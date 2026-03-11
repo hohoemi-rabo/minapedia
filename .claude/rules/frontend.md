@@ -1,5 +1,5 @@
 ---
-globs: ["src/components/**", "src/app/**/page.tsx", "src/app/**/layout.tsx", "src/app/**/loading.tsx", "src/app/**/error.tsx", "src/app/globals.css", "tailwind.config.ts"]
+paths: ["src/components/**", "src/app/**/page.tsx", "src/app/**/layout.tsx", "src/app/**/loading.tsx", "src/app/**/error.tsx", "src/app/globals.css", "tailwind.config.ts"]
 ---
 
 # フロントエンド・UI/UX ルール

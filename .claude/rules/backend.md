@@ -1,5 +1,5 @@
 ---
-globs: ["src/app/actions/**", "src/app/**/actions.ts", "src/app/api/**", "src/lib/**", "supabase/**"]
+paths: ["src/app/actions/**", "src/app/**/actions.ts", "src/app/api/**", "src/lib/**", "supabase/**"]
 ---
 
 # バックエンド・データベース ルール
