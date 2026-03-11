@@ -24,7 +24,7 @@ globs: ["src/components/**", "src/app/**/page.tsx", "src/app/**/layout.tsx", "sr
 
 - Tailwind CSS 3.4（v4ではない）を使用
 - カスタムカラー: `background` / `foreground`（CSS変数ベース）
-- フォントファミリー: `sans`（Geist Sans）/ `mono`（Geist Mono）
+- フォントファミリー: `sans`（M PLUS Rounded 1c — ポップな丸ゴシック）
 
 ## コンポーネント設計
 
@@ -35,9 +35,12 @@ globs: ["src/components/**", "src/app/**/page.tsx", "src/app/**/layout.tsx", "sr
 
 ## 主要コンポーネント
 
-- `PostCard` — 投稿カード（Server Component）。ハートボタンはClient Componentの `HeartButton` を内包
-- `PostFeed` — テーマフィルタ + 投稿一覧 + もっと見るボタン（Client Component）
+- `PostCard` — 投稿カード（Server Component）。ハートボタン・アバター・インライン詳細展開を内包
+- `PostCardDetail` — カード内アコーディオン展開（Client Component）。「続きを読む」で詳細をその場表示
+- `PostFeed` — テーマフィルタ（3列カプセル型グリッド）+ 投稿一覧 + もっと見るボタン（Client Component）
 - `PostForm` — 投稿作成・編集フォーム（Client Component）。画像圧縮・プレビュー付き
 - `HeartButton` — ハートリアクションのトグルボタン（Client Component）
+- `Avatar` — アバター表示（Server Component）。画像 or ニックネーム頭文字。sm/md/lgサイズ対応
+- `AvatarInput` — アバターアップロード・削除UI（Client Component）。画像圧縮付き
 - `BottomNav` — 下部固定ナビ。管理者には「管理」リンク追加（`isAdmin` prop）
 - `ImageCarousel` — 詳細ページの画像スワイプカルーセル

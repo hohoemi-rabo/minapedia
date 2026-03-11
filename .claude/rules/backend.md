@@ -8,10 +8,18 @@ globs: ["src/app/actions/**", "src/app/**/actions.ts", "src/app/api/**", "src/li
 
 主要テーブル: `profiles`, `posts`, `post_images`, `categories`, `reactions`
 - `posts.id` は UUID（string型）。Number() キャストは禁止
+- `profiles.avatar_url` — アバター画像のStorageパス（nullable）
 - RLS（Row Level Security）でアクセス制御
 - `reactions` に `(post_id, user_id, type)` のUNIQUE制約
-- Supabase JOIN（例: `profiles(nickname)`）はオブジェクトまたは配列を返すため、`Array.isArray()` で分岐が必要
+- Supabase JOIN（例: `profiles(nickname, avatar_url)`）はオブジェクトまたは配列を返すため、`Array.isArray()` で分岐が必要
 - 管理者機能: 投稿承認（pending → published）、おすすめ固定（最大3件）
+
+## Supabase Storage
+
+- バケット: `post-images`（投稿画像）、`avatars`（アバター画像、public）
+- アバターはタイムスタンプ付きファイル名（`user_id/{timestamp}`）でキャッシュ問題を回避
+- アバター更新時は古いファイルを先に削除してからアップロード
+- RLSポリシー: 自分のフォルダ（`user_id/`）のみ操作可能
 
 ## Server Actions（フォーム処理）
 

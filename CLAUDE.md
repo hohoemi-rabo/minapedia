@@ -13,7 +13,7 @@ Minapedia（ミナペディア）— 南信州のシニア向けクローズドS
 - **UI**: React 19 + Tailwind CSS 3.4
 - **Backend/DB**: Supabase (PostgreSQL, Auth, Storage)
 - **Hosting**: Vercel
-- **Fonts**: Geist Sans / Geist Mono (next/font)
+- **Fonts**: M PLUS Rounded 1c（丸ゴシック、next/font/google）
 
 ## Commands
 
@@ -43,6 +43,9 @@ npm run lint         # ESLint実行 (eslint)
 - `posts.id` は UUID（string型）。Number() キャストは禁止
 - Supabase JOIN はオブジェクトまたは配列を返すため、`Array.isArray()` で分岐が必要
 - 画像圧縮は `browser-image-compression` でクライアント側実施
+- アバター画像はタイムスタンプ付きファイル名（`user_id/{timestamp}`）でキャッシュ問題を回避
+- Supabase Storage バケット: `post-images`（投稿画像）、`avatars`（アバター画像）
+- Server Actions body上限: 5MB（`next.config.ts` で設定）
 - Supabase project ID: `slfdutaanuoswrofcomv`
 - エリア選択: 南信州14市町村（飯田市, 松川町, 高森町, 阿南町, 阿智村, 平谷村, 根羽村, 下條村, 売木村, 天龍村, 泰阜村, 喬木村, 豊丘村, 大鹿村）
 
