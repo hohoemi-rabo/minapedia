@@ -1,6 +1,7 @@
 # 08: 投稿詳細画面
 
 > マイルストーン: M3 | 優先度: 高
+> Status: DONE
 
 ## 概要
 
@@ -19,10 +20,10 @@
 
 ## Todo
 
-- [ ] `/posts/[id]` ページ作成
-- [ ] 写真スワイプ表示（複数枚対応・Client Component）
-- [ ] 全文表示レイアウト
-- [ ] 自分の投稿判定 → 編集・削除ボタン表示
-- [ ] 削除 Server Action（確認ダイアログ付き）
-- [ ] 編集ページ（`/posts/[id]/edit`）の実装
-- [ ] 編集 Server Action
+- [x] `/posts/[id]` ページ作成
+- [x] 写真スワイプ表示（複数枚対応・Client Component）
+- [x] 全文表示レイアウト
+- [x] 自分の投稿判定 → 編集・削除ボタン表示
+- [x] 削除 Server Action（確認ダイアログ付き）
+- [x] 編集ページ（`/posts/[id]/edit`）の実装
+- [x] 編集 Server Action

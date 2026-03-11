@@ -1,6 +1,7 @@
 # 07: ホーム画面（みんなの新着）
 
 > マイルストーン: M3 | 優先度: 高
+> Status: DONE
 
 ## 概要
 
@@ -16,9 +17,9 @@
 
 ## Todo
 
-- [ ] `/` ページ実装（Server Component でデータフェッチ）
-- [ ] 先生おすすめセクション（is_featured = true の投稿、最大3件）
-- [ ] テーマ絞り込みボタン（Client Component）
-- [ ] 新着投稿一覧（status = published のみ、新着順）
-- [ ] 「もっと見る」ボタンで5件ずつ追加読み込み（Client Component）
-- [ ] 投稿0件時の空状態メッセージ
+- [x] `/` ページ実装（Server Component でデータフェッチ）
+- [x] 先生おすすめセクション（is_featured = true の投稿、最大3件）
+- [x] テーマ絞り込みボタン（Client Component）
+- [x] 新着投稿一覧（status = published のみ、新着順）
+- [x] 「もっと見る」ボタンで5件ずつ追加読み込み（Client Component）
+- [x] 投稿0件時の空状態メッセージ

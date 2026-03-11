@@ -1,5 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
-import { logout } from "@/app/(auth)/login/actions";
+import { PostCard } from "@/components/post-card";
+import { PostFeed } from "@/components/post-feed";
+
+const POST_SELECT =
+  "id, title, spot_name, area, body_good, body_memo, created_at, profiles(nickname), categories(name, icon, color), post_images(storage_path, order_index), reactions(type)";
+const POSTS_PER_PAGE = 5;
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -12,6 +17,33 @@ export default async function HomePage() {
     .select("nickname, role")
     .eq("id", user!.id)
     .single();
+
+  // 先生おすすめ投稿（最大3件）
+  const { data: featuredPosts } = await supabase
+    .from("posts")
+    .select(POST_SELECT)
+    .eq("status", "published")
+    .eq("is_featured", true)
+    .order("created_at", { ascending: false })
+    .limit(3);
+
+  // 新着投稿（初期5件）
+  const { data: initialPosts } = await supabase
+    .from("posts")
+    .select(POST_SELECT)
+    .eq("status", "published")
+    .order("created_at", { ascending: false })
+    .limit(POSTS_PER_PAGE);
+
+  // カテゴリ一覧
+  const { data: categories } = await supabase
+    .from("categories")
+    .select("id, name, icon, color")
+    .eq("phase", 1)
+    .order("id");
+
+  const posts = initialPosts ?? [];
+  const hasMore = posts.length === POSTS_PER_PAGE;
 
   return (
     <div>
@@ -26,19 +58,25 @@ export default async function HomePage() {
         </p>
       </div>
 
-      <div className="mt-6 space-y-2 rounded-lg border p-4 text-sm text-gray-600">
-        <p>メール: {user?.email}</p>
-        <p>ロール: {profile?.role}</p>
-      </div>
+      {/* 先生おすすめ */}
+      {featuredPosts && featuredPosts.length > 0 && (
+        <section className="mt-8">
+          <h2 className="text-xl font-bold">⭐ 先生おすすめ</h2>
+          <div className="mt-4 space-y-4">
+            {featuredPosts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        </section>
+      )}
 
-      <form action={logout} className="mt-8">
-        <button
-          type="submit"
-          className="w-full rounded-lg bg-gray-200 px-4 py-3 text-lg font-medium text-gray-700 hover:bg-gray-300"
-        >
-          ログアウト
-        </button>
-      </form>
+      {/* テーマフィルタ + 新着一覧 + もっと見る */}
+      <PostFeed
+        initialPosts={posts}
+        initialHasMore={hasMore}
+        categories={categories ?? []}
+      />
+
     </div>
   );
 }
