@@ -1,22 +1,28 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ImageCarousel } from "@/components/image-carousel";
+import { DeletePostButton } from "@/components/delete-post-button";
 
 export function PostCardDetail({
+  postId,
   spotName,
   bodyGood,
   bodyMemo,
   images,
+  canEdit = false,
 }: {
+  postId: string;
   spotName: string | null;
   bodyGood: string | null;
   bodyMemo: string | null;
   images: { storage_path: string; order_index: number }[];
+  canEdit?: boolean;
 }) {
   const [open, setOpen] = useState(false);
 
-  const hasDetail = spotName || bodyGood || bodyMemo || images.length > 1;
+  const hasDetail = spotName || bodyGood || bodyMemo || images.length > 1 || canEdit;
   if (!hasDetail) return null;
 
   return (
@@ -63,6 +69,19 @@ export function PostCardDetail({
               <p className="mt-0.5 whitespace-pre-wrap text-lg text-gray-900">
                 {bodyMemo}
               </p>
+            </div>
+          )}
+
+          {/* 編集・削除（本人または管理者） */}
+          {canEdit && (
+            <div className="flex gap-3 border-t border-gray-100 pt-3">
+              <Link
+                href={`/posts/${postId}/edit`}
+                className="flex-1 rounded-lg border-2 border-gray-300 px-4 py-2.5 text-center text-base font-medium text-gray-700 hover:bg-gray-50"
+              >
+                編集する
+              </Link>
+              <DeletePostButton postId={postId} />
             </div>
           )}
         </div>

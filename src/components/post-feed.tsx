@@ -22,10 +22,12 @@ export function PostFeed({
   initialPosts,
   initialHasMore,
   categories,
+  isAdmin = false,
 }: {
   initialPosts: PostWithHeart[];
   initialHasMore: boolean;
   categories: Category[];
+  isAdmin?: boolean;
 }) {
   const [posts, setPosts] = useState<PostWithHeart[]>(initialPosts);
   const [hasMore, setHasMore] = useState(initialHasMore);
@@ -105,6 +107,7 @@ export function PostFeed({
               post={post}
               heartCount={post.heartCount}
               heartReacted={post.heartReacted}
+              canEdit={isAdmin}
             />
           ))}
         </div>

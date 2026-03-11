@@ -19,14 +19,14 @@ export async function deletePost(postId: string) {
     return { message: "ログインしてください。" };
   }
 
-  // 権限チェック
-  const { data: post } = await supabase
-    .from("posts")
-    .select("id, user_id")
-    .eq("id", postId)
-    .single();
+  // 権限チェック（本人または管理者）
+  const [{ data: post }, { data: profile }] = await Promise.all([
+    supabase.from("posts").select("id, user_id").eq("id", postId).single(),
+    supabase.from("profiles").select("role").eq("id", user.id).single(),
+  ]);
 
-  if (!post || post.user_id !== user.id) {
+  const isAdmin = profile?.role === "admin";
+  if (!post || (post.user_id !== user.id && !isAdmin)) {
     return { message: "この投稿を削除する権限がありません。" };
   }
 
@@ -78,14 +78,14 @@ export async function updatePost(
   const bodyGood = (formData.get("body_good") as string)?.trim() || null;
   const bodyMemo = (formData.get("body_memo") as string)?.trim() || null;
 
-  // 権限チェック
-  const { data: existingPost } = await supabase
-    .from("posts")
-    .select("id, user_id")
-    .eq("id", postId)
-    .single();
+  // 権限チェック（本人または管理者）
+  const [{ data: existingPost }, { data: userProfile }] = await Promise.all([
+    supabase.from("posts").select("id, user_id").eq("id", postId).single(),
+    supabase.from("profiles").select("role").eq("id", user.id).single(),
+  ]);
 
-  if (!existingPost || existingPost.user_id !== user.id) {
+  const isAdmin = userProfile?.role === "admin";
+  if (!existingPost || (existingPost.user_id !== user.id && !isAdmin)) {
     return { message: "この投稿を編集する権限がありません。" };
   }
 

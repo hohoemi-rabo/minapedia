@@ -34,6 +34,7 @@ export default async function HomePage() {
         .order("id"),
     ]);
 
+  const isAdmin = profile?.role === "admin";
   const posts = (initialPosts ?? []).map((post) => {
     const hearts = (post.reactions ?? []).filter((r) => r.type === "suteki");
     return {
@@ -70,6 +71,7 @@ export default async function HomePage() {
                   post={post}
                   heartCount={hearts.length}
                   heartReacted={hearts.some((r) => r.user_id === user!.id)}
+                  canEdit={isAdmin}
                 />
               );
             })}
@@ -82,6 +84,7 @@ export default async function HomePage() {
         initialPosts={posts}
         initialHasMore={hasMore}
         categories={categories ?? []}
+        isAdmin={isAdmin}
       />
 
     </div>

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { getAuthUser } from "@/lib/auth";
+import { getAuthUser, getProfile } from "@/lib/auth";
 import { ImageCarousel } from "@/components/image-carousel";
 import { DeletePostButton } from "@/components/delete-post-button";
 
@@ -13,9 +13,10 @@ export default async function PostDetailPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  // ユーザー取得と投稿取得を並列実行
-  const [user, { data: post }] = await Promise.all([
+  // ユーザー・プロフィール・投稿を並列取得
+  const [user, userProfile, { data: post }] = await Promise.all([
     getAuthUser(),
+    getProfile(),
     supabase
       .from("posts")
       .select(
@@ -29,9 +30,10 @@ export default async function PostDetailPage({
     notFound();
   }
 
-  // published OR 自分の投稿のみ閲覧可
+  // published OR 自分の投稿 OR 管理者のみ閲覧可
   const isOwner = user?.id === post.user_id;
-  if (post.status !== "published" && !isOwner) {
+  const isAdmin = userProfile?.role === "admin";
+  if (post.status !== "published" && !isOwner && !isAdmin) {
     notFound();
   }
 
@@ -122,11 +124,13 @@ export default async function PostDetailPage({
           </div>
         )}
 
-        {/* 自分の投稿のみ: 編集・削除 */}
-        {isOwner && (
+        {/* 本人または管理者: 編集・削除 */}
+        {(isOwner || isAdmin) && (
           <div className="space-y-3 border-t pt-4">
             <p className="text-sm text-gray-500">
-              あとで自分で編集・削除できます。
+              {isOwner
+                ? "あとで自分で編集・削除できます。"
+                : "管理者として編集・削除できます。"}
             </p>
             <div className="flex gap-3">
               <Link

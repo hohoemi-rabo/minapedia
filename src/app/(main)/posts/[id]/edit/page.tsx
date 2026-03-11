@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getAuthUser, getProfile } from "@/lib/auth";
 import { PostForm } from "@/components/post-form";
 
 export default async function EditPostPage({
@@ -10,31 +11,32 @@ export default async function EditPostPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const user = await getAuthUser();
   if (!user) {
     redirect("/login");
   }
 
-  const { data: post } = await supabase
-    .from("posts")
-    .select(
-      "id, user_id, title, spot_name, area, body_good, body_memo, category_id, post_images(storage_path, order_index)"
-    )
-    .eq("id", id)
-    .single();
+  // 投稿・カテゴリ・プロフィールを並列取得
+  const [{ data: post }, { data: categories }, userProfile] = await Promise.all([
+    supabase
+      .from("posts")
+      .select(
+        "id, user_id, title, spot_name, area, body_good, body_memo, category_id, post_images(storage_path, order_index)"
+      )
+      .eq("id", id)
+      .single(),
+    supabase
+      .from("categories")
+      .select("id, name, icon, color")
+      .eq("phase", 1)
+      .order("id"),
+    getProfile(),
+  ]);
 
-  if (!post || post.user_id !== user.id) {
+  const isAdmin = userProfile?.role === "admin";
+  if (!post || (post.user_id !== user.id && !isAdmin)) {
     notFound();
   }
-
-  const { data: categories } = await supabase
-    .from("categories")
-    .select("id, name, icon, color")
-    .eq("phase", 1)
-    .order("id");
 
   return (
     <div>

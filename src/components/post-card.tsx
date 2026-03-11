@@ -23,9 +23,10 @@ type PostCardProps = {
   post: Post;
   heartReacted?: boolean;
   heartCount?: number;
+  canEdit?: boolean;
 };
 
-export function PostCard({ post, heartReacted = false, heartCount = 0 }: PostCardProps) {
+export function PostCard({ post, heartReacted = false, heartCount = 0, canEdit = false }: PostCardProps) {
   const category = Array.isArray(post.categories) ? post.categories[0] : post.categories;
   const profile = Array.isArray(post.profiles) ? post.profiles[0] : post.profiles;
   const images = post.post_images;
@@ -94,10 +95,12 @@ export function PostCard({ post, heartReacted = false, heartCount = 0 }: PostCar
 
         {/* 続きを読む → その場で展開 */}
         <PostCardDetail
+          postId={post.id}
           spotName={post.spot_name}
           bodyGood={post.body_good}
           bodyMemo={post.body_memo}
           images={sortedImages}
+          canEdit={canEdit}
         />
       </div>
     </article>
