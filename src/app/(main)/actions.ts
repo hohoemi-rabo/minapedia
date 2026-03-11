@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 
 const POST_SELECT =
-  "id, title, spot_name, area, body_good, body_memo, created_at, profiles(nickname), categories(name, icon, color), post_images(storage_path, order_index), reactions(type)";
+  "id, title, spot_name, area, body_good, body_memo, created_at, profiles(nickname), categories(name, icon, color), post_images(storage_path, order_index), reactions(type, user_id)";
 
 export async function fetchPosts({
   offset,
@@ -15,6 +15,10 @@ export async function fetchPosts({
   categoryId?: number;
 }) {
   const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   let query = supabase
     .from("posts")
@@ -33,8 +37,18 @@ export async function fetchPosts({
     return { posts: [], hasMore: false };
   }
 
+  const postsWithHeart = (posts ?? []).map((post) => {
+    const reactions = (post.reactions ?? []) as { type: string; user_id: string }[];
+    const hearts = reactions.filter((r) => r.type === "suteki");
+    return {
+      ...post,
+      heartCount: hearts.length,
+      heartReacted: user ? hearts.some((r) => r.user_id === user.id) : false,
+    };
+  });
+
   return {
-    posts: posts ?? [],
+    posts: postsWithHeart,
     hasMore: (posts?.length ?? 0) === limit,
   };
 }

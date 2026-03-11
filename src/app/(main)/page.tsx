@@ -3,7 +3,7 @@ import { PostCard } from "@/components/post-card";
 import { PostFeed } from "@/components/post-feed";
 
 const POST_SELECT =
-  "id, title, spot_name, area, body_good, body_memo, created_at, profiles(nickname), categories(name, icon, color), post_images(storage_path, order_index), reactions(type)";
+  "id, title, spot_name, area, body_good, body_memo, created_at, profiles(nickname), categories(name, icon, color), post_images(storage_path, order_index), reactions(type, user_id)";
 const POSTS_PER_PAGE = 5;
 
 export default async function HomePage() {
@@ -42,7 +42,14 @@ export default async function HomePage() {
     .eq("phase", 1)
     .order("id");
 
-  const posts = initialPosts ?? [];
+  const posts = (initialPosts ?? []).map((post) => {
+    const hearts = (post.reactions ?? []).filter((r) => r.type === "suteki");
+    return {
+      ...post,
+      heartCount: hearts.length,
+      heartReacted: hearts.some((r) => r.user_id === user!.id),
+    };
+  });
   const hasMore = posts.length === POSTS_PER_PAGE;
 
   return (
@@ -63,9 +70,17 @@ export default async function HomePage() {
         <section className="mt-8">
           <h2 className="text-xl font-bold">⭐ 先生おすすめ</h2>
           <div className="mt-4 space-y-4">
-            {featuredPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
+            {featuredPosts.map((post) => {
+              const hearts = (post.reactions ?? []).filter((r) => r.type === "suteki");
+              return (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  heartCount={hearts.length}
+                  heartReacted={hearts.some((r) => r.user_id === user!.id)}
+                />
+              );
+            })}
           </div>
         </section>
       )}

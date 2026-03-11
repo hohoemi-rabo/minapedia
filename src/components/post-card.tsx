@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getPublicImageUrl } from "@/lib/supabase/storage";
+import { HeartButton } from "@/components/heart-button";
 
 export type Post = {
   id: string;
@@ -13,14 +14,15 @@ export type Post = {
   profiles: { nickname: string } | { nickname: string }[];
   categories: { name: string; icon: string; color: string } | { name: string; icon: string; color: string }[];
   post_images: { storage_path: string; order_index: number }[];
-  reactions?: { type: string }[];
 };
 
 type PostCardProps = {
   post: Post;
+  heartReacted?: boolean;
+  heartCount?: number;
 };
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, heartReacted = false, heartCount = 0 }: PostCardProps) {
   const category = Array.isArray(post.categories) ? post.categories[0] : post.categories;
   const profile = Array.isArray(post.profiles) ? post.profiles[0] : post.profiles;
   const images = post.post_images;
@@ -51,20 +53,27 @@ export function PostCard({ post }: PostCardProps) {
       )}
 
       <div className="p-4">
-        {/* バッジ行 */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span
-            className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium text-white"
-            style={{ backgroundColor: category.color }}
-          >
-            <span>{category.icon}</span>
-            {category.name}
-          </span>
-          {post.area && (
-            <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700">
-              {post.area}
+        {/* バッジ行 + ハート */}
+        <div className="flex items-center gap-2">
+          <div className="flex flex-1 flex-wrap items-center gap-2">
+            <span
+              className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium text-white"
+              style={{ backgroundColor: category.color }}
+            >
+              <span>{category.icon}</span>
+              {category.name}
             </span>
-          )}
+            {post.area && (
+              <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700">
+                {post.area}
+              </span>
+            )}
+          </div>
+          <HeartButton
+            postId={post.id}
+            initialReacted={heartReacted}
+            initialCount={heartCount}
+          />
         </div>
 
         {/* タイトル */}
@@ -78,25 +87,6 @@ export function PostCard({ post }: PostCardProps) {
           <p className="mt-2 line-clamp-2 text-base text-gray-700">
             {previewText}
           </p>
-        )}
-
-        {/* リアクションカウント */}
-        {post.reactions && post.reactions.length > 0 && (
-          <div className="mt-2 flex gap-3 text-sm text-gray-400">
-            {(() => {
-              const counts = { suteki: 0, ikitai: 0, sanko: 0 };
-              post.reactions.forEach((r) => {
-                if (r.type in counts) counts[r.type as keyof typeof counts]++;
-              });
-              return (
-                <>
-                  {counts.suteki > 0 && <span>すてき {counts.suteki}</span>}
-                  {counts.ikitai > 0 && <span>行ってみたい {counts.ikitai}</span>}
-                  {counts.sanko > 0 && <span>参考になった {counts.sanko}</span>}
-                </>
-              );
-            })()}
-          </div>
         )}
 
         {/* 続きを読む */}

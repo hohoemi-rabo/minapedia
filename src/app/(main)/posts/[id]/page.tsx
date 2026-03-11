@@ -3,8 +3,6 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { ImageCarousel } from "@/components/image-carousel";
 import { DeletePostButton } from "@/components/delete-post-button";
-import { ReactionButtons } from "@/components/reaction-buttons";
-import type { ReactionType } from "@/app/(main)/posts/[id]/actions";
 
 export default async function PostDetailPage({
   params,
@@ -46,21 +44,6 @@ export default async function PostDetailPage({
     (a, b) => a.order_index - b.order_index
   );
 
-  // リアクションデータ取得
-  const { data: allReactions } = await supabase
-    .from("reactions")
-    .select("type, user_id")
-    .eq("post_id", id);
-
-  const reactionTypes: ReactionType[] = ["suteki", "ikitai", "sanko"];
-  const reactions = reactionTypes.map((type) => {
-    const ofType = (allReactions ?? []).filter((r) => r.type === type);
-    return {
-      type,
-      count: ofType.length,
-      reacted: ofType.some((r) => r.user_id === user?.id),
-    };
-  });
 
   return (
     <article>
@@ -137,11 +120,6 @@ export default async function PostDetailPage({
             </p>
           </div>
         )}
-
-        {/* リアクション */}
-        <div className="border-t pt-4">
-          <ReactionButtons postId={post.id} reactions={reactions} />
-        </div>
 
         {/* 自分の投稿のみ: 編集・削除 */}
         {isOwner && (

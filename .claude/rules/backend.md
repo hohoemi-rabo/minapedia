@@ -7,9 +7,11 @@ globs: ["src/app/actions/**", "src/app/**/actions.ts", "src/app/api/**", "src/li
 ## Database Schema (Supabase)
 
 主要テーブル: `profiles`, `posts`, `post_images`, `categories`, `reactions`
-- 詳細は `REQUIREMENTS.md` セクション7参照
+- `posts.id` は UUID（string型）。Number() キャストは禁止
 - RLS（Row Level Security）でアクセス制御
 - `reactions` に `(post_id, user_id, type)` のUNIQUE制約
+- Supabase JOIN（例: `profiles(nickname)`）はオブジェクトまたは配列を返すため、`Array.isArray()` で分岐が必要
+- 管理者機能: 投稿承認（pending → published）、おすすめ固定（最大3件）
 
 ## Server Actions（フォーム処理）
 
@@ -38,3 +40,5 @@ export async function createPost(prevState: any, formData: FormData) {
 - 環境変数: `.env.*` はgitignore済み。ブラウザに公開する変数のみ `NEXT_PUBLIC_` プレフィックスを付与
 - Supabase RLSで認証ユーザーのみアクセス制御
 - 管理者ロールは `profiles.role = 'admin'` で管理
+- 管理画面は `src/app/(main)/admin/layout.tsx` でロールガード（非adminは `notFound()`）
+- Server Actionsでは `requireAdmin()` ヘルパーで権限チェック

@@ -11,6 +11,11 @@ type Category = {
   color: string;
 };
 
+type PostWithHeart = Post & {
+  heartCount?: number;
+  heartReacted?: boolean;
+};
+
 const POSTS_PER_PAGE = 5;
 
 export function PostFeed({
@@ -18,11 +23,11 @@ export function PostFeed({
   initialHasMore,
   categories,
 }: {
-  initialPosts: Post[];
+  initialPosts: PostWithHeart[];
   initialHasMore: boolean;
   categories: Category[];
 }) {
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const [posts, setPosts] = useState<PostWithHeart[]>(initialPosts);
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -35,7 +40,7 @@ export function PostFeed({
         limit: POSTS_PER_PAGE,
         categoryId: categoryId ?? undefined,
       });
-      setPosts(result.posts as Post[]);
+      setPosts(result.posts as PostWithHeart[]);
       setHasMore(result.hasMore);
     });
   };
@@ -47,7 +52,7 @@ export function PostFeed({
         limit: POSTS_PER_PAGE,
         categoryId: selectedCategory ?? undefined,
       });
-      setPosts((prev) => [...prev, ...(result.posts as Post[])]);
+      setPosts((prev) => [...prev, ...(result.posts as PostWithHeart[])]);
       setHasMore(result.hasMore);
     });
   };
@@ -94,7 +99,12 @@ export function PostFeed({
       {posts.length > 0 ? (
         <div className="mt-4 space-y-4">
           {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard
+              key={post.id}
+              post={post}
+              heartCount={post.heartCount}
+              heartReacted={post.heartReacted}
+            />
           ))}
         </div>
       ) : (

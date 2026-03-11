@@ -34,7 +34,7 @@ export default async function MyPage() {
   const { data: posts } = await supabase
     .from("posts")
     .select(
-      "id, title, spot_name, area, body_good, body_memo, status, created_at, profiles(nickname), categories(name, icon, color), post_images(storage_path, order_index), reactions(type)"
+      "id, title, spot_name, area, body_good, body_memo, status, created_at, profiles(nickname), categories(name, icon, color), post_images(storage_path, order_index)"
     )
     .eq("user_id", user!.id)
     .order("created_at", { ascending: false });
