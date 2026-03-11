@@ -12,6 +12,10 @@ globs: ["src/components/**", "src/app/**/page.tsx", "src/app/**/layout.tsx", "sr
 - **リアクション**: ホームカードではハートマーク（❤️/🤍）のみ。バッジ行の右側に配置
 - **コメントなし**: SNS疲れ防止
 - **無限スクロール禁止**: 「もっと見る」ボタンで5件ずつ追加読み込み
+- **8テーマ**: おすすめスポット / おいしいもの / 失敗したこと / 昔の思い出 / ありがとう / 教えたいこと / 先生に質問 / つぶやき
+- **汎用フォームフィールド**: タイトル（必須）、場所の名前、エリア（南信州14市町村 + その他直接入力）、くわしく教えて、写真
+- **リッチ通知**: ConfirmDialog（モーダル確認）+ Toast（自動消去トースト）+ SuccessToast（URL param連動）
+- **管理者権限**: 管理者は全投稿の編集・削除が可能（ホームカード・詳細画面両方で操作可能）
 
 ## シニア向けアクセシビリティ
 
@@ -35,12 +39,16 @@ globs: ["src/components/**", "src/app/**/page.tsx", "src/app/**/layout.tsx", "sr
 
 ## 主要コンポーネント
 
-- `PostCard` — 投稿カード（Server Component）。ハートボタン・アバター・インライン詳細展開を内包
-- `PostCardDetail` — カード内アコーディオン展開（Client Component）。「続きを読む」で詳細をその場表示
-- `PostFeed` — テーマフィルタ（3列カプセル型グリッド）+ 投稿一覧 + もっと見るボタン（Client Component）
-- `PostForm` — 投稿作成・編集フォーム（Client Component）。画像圧縮・プレビュー付き
+- `PostCard` — 投稿カード（Server Component）。ハートボタン・アバター・インライン詳細展開を内包。`canEdit` propで管理者の編集・削除ボタン表示
+- `PostCardDetail` — カード内アコーディオン展開（Client Component）。「続きを読む」で詳細表示。`canEdit` 時に編集・削除ボタン付き
+- `PostFeed` — テーマフィルタ（3列カプセル型グリッド）+ 投稿一覧 + もっと見るボタン（Client Component）。`isAdmin` propで管理者権限伝播
+- `PostForm` — 投稿作成・編集フォーム（Client Component）。画像圧縮・プレビュー付き。エリアは南信州14市町村 + その他直接入力
 - `HeartButton` — ハートリアクションのトグルボタン（Client Component）
 - `Avatar` — アバター表示（Server Component）。画像 or ニックネーム頭文字。sm/md/lgサイズ対応
 - `AvatarInput` — アバターアップロード・削除UI（Client Component）。画像圧縮付き
 - `BottomNav` — 下部固定ナビ。管理者には「管理」リンク追加（`isAdmin` prop）
 - `ImageCarousel` — 詳細ページの画像スワイプカルーセル
+- `ConfirmDialog` — モーダル確認ダイアログ（Client Component）。`danger`/`info` バリアント。`window.confirm` の代替
+- `Toast` — 画面上部トースト通知（Client Component）。3秒で自動消去。`success`/`error` バリアント
+- `SuccessToast` — URL `?message=` パラメータ連動のトースト（Client Component）。投稿・更新後のフィードバック表示
+- `DeletePostButton` — 投稿削除ボタン（Client Component）。`size="sm"`（マイページ inline）/ `size="lg"`（詳細画面）。ConfirmDialog付き

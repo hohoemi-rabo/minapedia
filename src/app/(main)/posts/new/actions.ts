@@ -124,5 +124,5 @@ export async function createPost(
   }
 
   revalidatePath("/");
-  redirect("/");
+  redirect("/?message=posted");
 }

@@ -47,7 +47,9 @@ npm run lint         # ESLint実行 (eslint)
 - Supabase Storage バケット: `post-images`（投稿画像）、`avatars`（アバター画像）
 - Server Actions body上限: 5MB（`next.config.ts` で設定）
 - Supabase project ID: `slfdutaanuoswrofcomv`
-- エリア選択: 南信州14市町村（飯田市, 松川町, 高森町, 阿南町, 阿智村, 平谷村, 根羽村, 下條村, 売木村, 天龍村, 泰阜村, 喬木村, 豊丘村, 大鹿村）
+- エリア選択: 南信州14市町村 + 「その他（直接入力）」で自由記入可
+- 投稿フォーム: タイトル（必須）、場所の名前、エリア、くわしく教えて、写真
+- テーマ（カテゴリ）8種: おすすめスポット / おいしいもの / 失敗したこと / 昔の思い出 / ありがとう / 教えたいこと / 先生に質問 / つぶやき
 
 ## Performance Patterns
 

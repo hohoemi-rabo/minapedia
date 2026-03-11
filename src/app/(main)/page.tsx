@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { getAuthUser, getProfile } from "@/lib/auth";
 import { PostCard } from "@/components/post-card";
 import { PostFeed } from "@/components/post-feed";
+import { SuccessToast } from "@/components/success-toast";
 import { POST_SELECT, POSTS_PER_PAGE } from "@/lib/constants";
 
 export default async function HomePage() {
@@ -47,6 +49,9 @@ export default async function HomePage() {
 
   return (
     <div>
+      <Suspense>
+        <SuccessToast />
+      </Suspense>
       <h1 className="text-2xl font-bold">Minapedia</h1>
       <p className="mt-2 text-lg text-gray-600">
         ようこそ、{profile?.nickname ?? "ユーザー"}さん！

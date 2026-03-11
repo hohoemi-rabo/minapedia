@@ -190,7 +190,7 @@ export async function updatePost(
 
   revalidatePath("/");
   revalidatePath(`/posts/${postId}`);
-  redirect(`/posts/${postId}`);
+  redirect(`/?message=updated`);
 }
 
 export type ReactionType = "suteki" | "ikitai" | "sanko";

@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getAuthUser, getProfile } from "@/lib/auth";
 import { logout } from "@/app/(auth)/login/actions";
 import { PostCard } from "@/components/post-card";
+import { DeletePostButton } from "@/components/delete-post-button";
 import { Avatar } from "@/components/avatar";
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
@@ -81,12 +82,15 @@ export default async function MyPage() {
                     >
                       {badge.label}
                     </span>
-                    <Link
-                      href={`/posts/${post.id}/edit`}
-                      className="text-sm font-medium text-blue-600 hover:text-blue-800"
-                    >
-                      編集する
-                    </Link>
+                    <div className="flex items-center gap-3">
+                      <Link
+                        href={`/posts/${post.id}/edit`}
+                        className="text-sm font-medium text-blue-600 hover:text-blue-800"
+                      >
+                        編集
+                      </Link>
+                      <DeletePostButton postId={post.id} size="sm" />
+                    </div>
                   </div>
                   <div className="mt-1">
                     <PostCard post={post} />

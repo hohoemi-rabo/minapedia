@@ -62,6 +62,11 @@ export function PostForm({
     defaultValues?.category_id ?? null
   );
 
+  const defaultArea = defaultValues?.area ?? "";
+  const isDefaultOther = defaultArea !== "" && !AREAS.includes(defaultArea as typeof AREAS[number]);
+  const [areaSelect, setAreaSelect] = useState(isDefaultOther ? "other" : defaultArea);
+  const [areaOther, setAreaOther] = useState(isDefaultOther ? defaultArea : "");
+
   return (
     <div className="space-y-6">
       {mode === "create" && (
@@ -149,14 +154,19 @@ export function PostForm({
 
         {/* エリア */}
         <div>
-          <label htmlFor="area" className="block text-lg font-medium text-foreground">
+          <label htmlFor="area_select" className="block text-lg font-medium text-foreground">
             エリア
           </label>
           <select
-            id="area"
-            name="area"
+            id="area_select"
             className={inputClass}
-            defaultValue={defaultValues?.area ?? ""}
+            value={areaSelect}
+            onChange={(e) => {
+              setAreaSelect(e.target.value);
+              if (e.target.value !== "other") {
+                setAreaOther("");
+              }
+            }}
           >
             <option value="">選択してください</option>
             {AREAS.map((area) => (
@@ -164,36 +174,36 @@ export function PostForm({
                 {area}
               </option>
             ))}
+            <option value="other">その他（直接入力）</option>
           </select>
+          {areaSelect === "other" && (
+            <input
+              type="text"
+              value={areaOther}
+              onChange={(e) => setAreaOther(e.target.value)}
+              className={inputClass}
+              placeholder="例: 東京都、名古屋市"
+            />
+          )}
+          <input
+            type="hidden"
+            name="area"
+            value={areaSelect === "other" ? areaOther : areaSelect}
+          />
         </div>
 
-        {/* どこがよかった？ */}
+        {/* くわしく教えて */}
         <div>
           <label htmlFor="body_good" className="block text-lg font-medium text-foreground">
-            どこがよかった？
+            くわしく教えて
           </label>
           <textarea
             id="body_good"
             name="body_good"
-            rows={3}
+            rows={4}
             defaultValue={defaultValues?.body_good ?? ""}
             className={inputClass}
-            placeholder="例: 歩きやすかった、ケーキが美味しかった"
-          />
-        </div>
-
-        {/* ひとこと感想 */}
-        <div>
-          <label htmlFor="body_memo" className="block text-lg font-medium text-foreground">
-            ひとこと感想
-          </label>
-          <textarea
-            id="body_memo"
-            name="body_memo"
-            rows={3}
-            defaultValue={defaultValues?.body_memo ?? ""}
-            className={inputClass}
-            placeholder="例: また春にも行ってみたいです"
+            placeholder="例: こんなことがありました…"
           />
         </div>
 

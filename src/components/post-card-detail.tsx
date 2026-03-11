@@ -50,22 +50,18 @@ export function PostCardDetail({
             </div>
           )}
 
-          {/* どこがよかった？ */}
+          {/* くわしく */}
           {bodyGood && (
             <div>
-              <p className="text-sm font-medium text-gray-500">
-                どこがよかった？
-              </p>
               <p className="mt-0.5 whitespace-pre-wrap text-lg text-gray-900">
                 {bodyGood}
               </p>
             </div>
           )}
 
-          {/* ひとこと感想 */}
+          {/* ひとこと感想（旧データ互換） */}
           {bodyMemo && (
             <div>
-              <p className="text-sm font-medium text-gray-500">ひとこと感想</p>
               <p className="mt-0.5 whitespace-pre-wrap text-lg text-gray-900">
                 {bodyMemo}
               </p>

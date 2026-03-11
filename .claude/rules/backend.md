@@ -12,7 +12,7 @@ globs: ["src/app/actions/**", "src/app/**/actions.ts", "src/app/api/**", "src/li
 - RLS（Row Level Security）でアクセス制御
 - `reactions` に `(post_id, user_id, type)` のUNIQUE制約
 - Supabase JOIN（例: `profiles(nickname, avatar_url)`）はオブジェクトまたは配列を返すため、`Array.isArray()` で分岐が必要
-- 管理者機能: 投稿承認（pending → published）、おすすめ固定（最大3件）
+- 管理者機能: 投稿承認（pending → published）、おすすめ固定（最大3件）、全投稿の編集・削除
 - `post_images`, `reactions` は `posts` に ON DELETE CASCADE（投稿削除時に自動削除）
 
 ## Database Functions (RPC)
@@ -69,3 +69,11 @@ export async function createPost(prevState: any, formData: FormData) {
 - 管理者ロールは `profiles.role = 'admin'` で管理
 - 管理画面は `src/app/(main)/admin/layout.tsx` でロールガード（非adminは `notFound()`）
 - Server Actionsでは `requireAdmin()` ヘルパーで権限チェック
+- 投稿の編集・削除は本人 or 管理者（Server Actionで並列に権限チェック）
+- 投稿完了後は `redirect("/?message=posted")` / `redirect("/?message=updated")` でホームにトースト表示
+
+## カテゴリ（テーマ）
+
+8種（`categories` テーブル、`phase=1` でフィルタ）:
+1. おすすめスポット 2. おいしいもの 3. 失敗したこと 4. 昔の思い出
+5. ありがとう 6. 教えたいこと 7. 先生に質問 8. つぶやき

@@ -100,28 +100,18 @@ export default async function PostDetailPage({
           </div>
         )}
 
-        {/* どこがよかった？ */}
+        {/* 本文 */}
         {post.body_good && (
-          <div>
-            <h2 className="text-base font-medium text-gray-500">
-              どこがよかった？
-            </h2>
-            <p className="mt-1 whitespace-pre-wrap text-lg text-gray-900">
-              {post.body_good}
-            </p>
-          </div>
+          <p className="whitespace-pre-wrap text-lg text-gray-900">
+            {post.body_good}
+          </p>
         )}
 
-        {/* ひとこと感想 */}
+        {/* ひとこと感想（旧データ互換） */}
         {post.body_memo && (
-          <div>
-            <h2 className="text-base font-medium text-gray-500">
-              ひとこと感想
-            </h2>
-            <p className="mt-1 whitespace-pre-wrap text-lg text-gray-900">
-              {post.body_memo}
-            </p>
-          </div>
+          <p className="whitespace-pre-wrap text-lg text-gray-900">
+            {post.body_memo}
+          </p>
         )}
 
         {/* 本人または管理者: 編集・削除 */}
