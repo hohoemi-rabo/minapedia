@@ -52,16 +52,9 @@ export default async function HomePage() {
       <Suspense>
         <SuccessToast />
       </Suspense>
-      <h1 className="text-2xl font-bold">Minapedia</h1>
-      <p className="mt-2 text-lg text-gray-600">
+      <p className="text-lg text-gray-600">
         ようこそ、{profile?.nickname ?? "ユーザー"}さん！
       </p>
-
-      <div className="mt-6 rounded-lg bg-blue-50 p-4">
-        <p className="text-blue-800">
-          このサービスは教室の生徒さんだけが見られます。
-        </p>
-      </div>
 
       {/* 先生おすすめ */}
       {featuredPosts && featuredPosts.length > 0 && (

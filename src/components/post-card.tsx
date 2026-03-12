@@ -49,19 +49,24 @@ export function PostCard({ post, heartReacted = false, heartCount = 0, canEdit =
         </div>
       )}
 
-      <div className="p-4">
-        {/* バッジ行 + ハート */}
+      <div className="p-3">
+        {/* アイコン + バッジ行 + ハート */}
         <div className="flex items-center gap-2">
-          <div className="flex flex-1 flex-wrap items-center gap-2">
+          <Avatar
+            nickname={profile.nickname}
+            avatarUrl={profile.avatar_url ?? null}
+            size="sm"
+          />
+          <div className="flex flex-1 flex-wrap items-center gap-1.5">
             <span
-              className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium text-white"
+              className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-sm font-medium text-white"
               style={{ backgroundColor: category.color }}
             >
               <span>{category.icon}</span>
               {category.name}
             </span>
             {post.area && (
-              <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700">
+              <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-sm text-gray-700">
                 {post.area}
               </span>
             )}
@@ -74,21 +79,11 @@ export function PostCard({ post, heartReacted = false, heartCount = 0, canEdit =
         </div>
 
         {/* タイトル */}
-        <h2 className="mt-3 text-xl font-bold text-gray-900">{post.title}</h2>
-
-        {/* 投稿者 */}
-        <div className="mt-1 flex items-center gap-2">
-          <Avatar
-            nickname={profile.nickname}
-            avatarUrl={profile.avatar_url ?? null}
-            size="sm"
-          />
-          <p className="text-sm text-gray-500">{profile.nickname}</p>
-        </div>
+        <h2 className="mt-2 text-lg font-bold text-gray-900">{post.title}</h2>
 
         {/* 本文プレビュー（閉じている時だけ表示） */}
         {previewText && (
-          <p className="mt-2 line-clamp-2 text-base text-gray-700">
+          <p className="mt-1 line-clamp-2 text-base text-gray-700">
             {previewText}
           </p>
         )}

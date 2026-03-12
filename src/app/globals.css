@@ -29,3 +29,12 @@ select,
 button {
   font-size: inherit;
 }
+
+/* 横スクロール時のスクロールバー非表示 */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

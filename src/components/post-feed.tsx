@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { PostCard, type Post } from "@/components/post-card";
 import { fetchPosts } from "@/app/(main)/actions";
 
@@ -46,7 +46,7 @@ export function PostFeed({
     });
   };
 
-  const handleLoadMore = () => {
+  const handleLoadMore = useCallback(() => {
     startTransition(async () => {
       const lastPost = posts[posts.length - 1];
       const result = await fetchPosts({
@@ -57,17 +57,37 @@ export function PostFeed({
       setPosts((prev) => [...prev, ...(result.posts as PostWithHeart[])]);
       setHasMore(result.hasMore);
     });
-  };
+  }, [posts, selectedCategory]);
+
+  // 無限スクロール: 番兵要素が画面内に入ったら自動読み込み
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isPending) {
+          handleLoadMore();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasMore, isPending, handleLoadMore]);
 
   return (
     <section className="mt-8">
       {/* テーマフィルタ */}
       <h2 className="text-xl font-bold">テーマで絞る</h2>
-      <div className="mt-3 grid grid-cols-3 gap-2">
+      <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-2 scrollbar-hide">
         <button
           type="button"
           onClick={() => handleCategoryChange(null)}
-          className={`flex items-center justify-center rounded-full border-2 px-2 py-2.5 text-sm font-medium transition-colors ${
+          className={`shrink-0 rounded-full border-2 px-4 py-2.5 text-sm font-medium transition-colors ${
             selectedCategory === null
               ? "border-blue-500 bg-blue-50 font-bold"
               : "border-gray-200 bg-white hover:border-gray-300"
@@ -80,7 +100,7 @@ export function PostFeed({
             key={cat.id}
             type="button"
             onClick={() => handleCategoryChange(cat.id)}
-            className={`flex items-center gap-1.5 rounded-full border-2 px-2 py-2.5 text-sm font-medium transition-colors ${
+            className={`flex shrink-0 items-center gap-1.5 rounded-full border-2 px-4 py-2.5 text-sm font-medium transition-colors ${
               selectedCategory === cat.id
                 ? "border-blue-500 bg-blue-50 font-bold"
                 : "border-gray-200 bg-white hover:border-gray-300"
@@ -117,17 +137,12 @@ export function PostFeed({
         </p>
       )}
 
-      {/* もっと見る */}
-      {hasMore && (
-        <button
-          type="button"
-          onClick={handleLoadMore}
-          disabled={isPending}
-          className="mt-6 w-full rounded-lg border-2 border-gray-300 px-4 py-4 text-lg font-medium text-gray-700 hover:border-gray-400 hover:bg-gray-50 disabled:opacity-50"
-        >
-          {isPending ? "読み込み中..." : "もっと見る"}
-        </button>
-      )}
+      {/* 無限スクロール番兵 + ローディング表示 */}
+      <div ref={sentinelRef} className="mt-6 flex justify-center py-4">
+        {isPending && (
+          <span className="text-gray-500">読み込み中...</span>
+        )}
+      </div>
     </section>
   );
 }

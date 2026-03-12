@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import { getPublicImageUrl } from "@/lib/supabase/storage";
 
-const MAX_IMAGES = 3;
+const MAX_IMAGES = 1;
 const COMPRESSION_OPTIONS = {
   maxSizeMB: 0.5,
   maxWidthOrHeight: 1920,
@@ -104,7 +104,7 @@ export function ImageInput({
   return (
     <div>
       <label className="block text-lg font-medium text-foreground">
-        写真（最大{MAX_IMAGES}枚まで）
+        写真（1枚）
       </label>
 
       {/* プレビュー */}
@@ -175,7 +175,6 @@ export function ImageInput({
         ref={fileInputRef}
         type="file"
         accept="image/*"
-        multiple
         onChange={handleFileChange}
         className="hidden"
       />
@@ -185,7 +184,6 @@ export function ImageInput({
         ref={hiddenInputRef}
         type="file"
         name="images"
-        multiple
         className="hidden"
       />
 
