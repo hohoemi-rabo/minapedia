@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
+import { PasswordInput } from "@/components/password-input";
 import { signup, type SignupState } from "./actions";
 
 export default function SignupPage() {
@@ -79,14 +80,12 @@ export default function SignupPage() {
               パスワード
             </label>
             <p className="mt-1 text-sm text-gray-500">6文字以上</p>
-            <input
+            <PasswordInput
               id="password"
               name="password"
-              type="password"
               required
               minLength={6}
               autoComplete="new-password"
-              className="mt-2 block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-lg text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 

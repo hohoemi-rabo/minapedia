@@ -41,12 +41,14 @@ paths: ["src/components/**", "src/app/**/page.tsx", "src/app/**/layout.tsx", "sr
 
 - `PostCard` — 投稿カード（Server Component）。ハートボタン・アバター・インライン詳細展開を内包。`canEdit` propで管理者の編集・削除ボタン表示
 - `PostCardDetail` — カード内アコーディオン展開（Client Component）。「続きを読む」で詳細表示。`canEdit` 時に編集・削除ボタン付き
-- `PostFeed` — テーマフィルタ（3列カプセル型グリッド）+ 投稿一覧 + もっと見るボタン（Client Component）。`isAdmin` propで管理者権限伝播
+- `PostFeed` — テーマフィルタ（横スクロール）+ 投稿一覧 + 無限スクロール（Client Component）。`isAdmin` propで管理者権限伝播
 - `PostForm` — 投稿作成・編集フォーム（Client Component）。画像圧縮・プレビュー付き。エリアは南信州14市町村 + その他直接入力
 - `HeartButton` — ハートリアクションのトグルボタン（Client Component）
 - `Avatar` — アバター表示（Server Component）。画像 or ニックネーム頭文字。sm/md/lgサイズ対応
 - `AvatarInput` — アバターアップロード・削除UI（Client Component）。画像圧縮付き
-- `BottomNav` — 下部固定ナビ。管理者には「管理」リンク追加（`isAdmin` prop）
+- `BottomNav` — 下部固定ナビ（アイコンのみ、半透明黒背景+すりガラス）。管理者には「管理」追加。タップフィードバック + アクティブインジケーター付き
+- `NavigationProgress` — ページ遷移時の画面上部プログレスバー（Client Component）
+- `PasswordInput` — パスワード入力欄（Client Component）。表示/隠すトグル付き
 - `ImageCarousel` — 詳細ページの画像スワイプカルーセル
 - `ConfirmDialog` — モーダル確認ダイアログ（Client Component）。`danger`/`info` バリアント。`window.confirm` の代替
 - `Toast` — 画面上部トースト通知（Client Component）。3秒で自動消去。`success`/`error` バリアント

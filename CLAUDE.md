@@ -45,7 +45,8 @@ npm run lint         # ESLint実行 (eslint)
 - 画像圧縮は `browser-image-compression` でクライアント側実施（動的importでバンドル最適化）
 - アバター画像はタイムスタンプ付きファイル名（`user_id/{timestamp}`）でキャッシュ問題を回避
 - Supabase Storage バケット: `post-images`（投稿画像）、`avatars`（アバター画像）
-- Server Actions body上限: 5MB（`next.config.ts` で設定）
+- Server Actions body上限: 10MB（`next.config.ts` で設定）
+- 画像アップロード: 1枚まで（将来3枚に拡張予定）
 - Supabase project ID: `slfdutaanuoswrofcomv`
 - エリア選択: 南信州14市町村 + 「その他（直接入力）」で自由記入可
 - 投稿フォーム: タイトル（必須）、場所の名前、エリア、くわしく教えて、写真
