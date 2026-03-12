@@ -12,8 +12,11 @@ export default async function NewPostPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">新しい投稿</h1>
-      <div className="mt-6">
+      <h1 className="text-2xl font-bold">✏️ 新しい投稿</h1>
+      <p className="mt-1 text-sm text-gray-500">
+        あなたの体験を教えてください
+      </p>
+      <div className="mt-4 rounded-xl bg-white p-5 shadow-lg ring-1 ring-gray-100">
         <PostForm categories={categories ?? []} />
       </div>
     </div>

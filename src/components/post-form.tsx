@@ -69,12 +69,6 @@ export function PostForm({
 
   return (
     <div className="space-y-6">
-      {mode === "create" && (
-        <div className="rounded-lg bg-blue-50 p-4 text-blue-800">
-          投稿は先生が確認してから表示されます。安心して投稿してくださいね。
-        </div>
-      )}
-
       <form action={action} className="space-y-6">
         {state?.message && (
           <div
@@ -93,7 +87,7 @@ export function PostForm({
 
         {/* テーマ選択 */}
         <fieldset>
-          <legend className="text-lg font-medium text-foreground">
+          <legend className="text-lg font-medium text-gray-900">
             テーマを選んでください <span className="text-red-500">*</span>
           </legend>
           <div className="mt-3 grid grid-cols-2 gap-3">
@@ -122,7 +116,7 @@ export function PostForm({
 
         {/* タイトル */}
         <div>
-          <label htmlFor="title" className="block text-lg font-medium text-foreground">
+          <label htmlFor="title" className="block text-lg font-medium text-gray-900">
             タイトル <span className="text-red-500">*</span>
           </label>
           <input
@@ -139,7 +133,7 @@ export function PostForm({
 
         {/* 場所の名前 */}
         <div>
-          <label htmlFor="spot_name" className="block text-lg font-medium text-foreground">
+          <label htmlFor="spot_name" className="block text-lg font-medium text-gray-900">
             場所の名前
           </label>
           <input
@@ -154,7 +148,7 @@ export function PostForm({
 
         {/* エリア */}
         <div>
-          <label htmlFor="area_select" className="block text-lg font-medium text-foreground">
+          <label htmlFor="area_select" className="block text-lg font-medium text-gray-900">
             エリア
           </label>
           <select
@@ -194,7 +188,7 @@ export function PostForm({
 
         {/* くわしく教えて */}
         <div>
-          <label htmlFor="body_good" className="block text-lg font-medium text-foreground">
+          <label htmlFor="body_good" className="block text-lg font-medium text-gray-900">
             くわしく教えて
           </label>
           <textarea

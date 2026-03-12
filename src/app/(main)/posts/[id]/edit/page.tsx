@@ -40,22 +40,25 @@ export default async function EditPostPage({
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">投稿を編集</h1>
-      <div className="mt-6">
-        <PostForm
-          categories={categories ?? []}
-          mode="edit"
-          postId={post.id}
-          defaultValues={{
-            title: post.title,
-            category_id: post.category_id,
-            spot_name: post.spot_name,
-            area: post.area,
-            body_good: post.body_good,
-            body_memo: post.body_memo,
-            post_images: post.post_images,
-          }}
-        />
+      <h1 className="text-2xl font-bold">📝 投稿を編集</h1>
+      <p className="mt-1 text-sm text-gray-500">
+        内容を修正できます
+      </p>
+      <div className="mt-4 rounded-xl bg-white p-5 shadow-lg ring-1 ring-gray-100">
+          <PostForm
+            categories={categories ?? []}
+            mode="edit"
+            postId={post.id}
+            defaultValues={{
+              title: post.title,
+              category_id: post.category_id,
+              spot_name: post.spot_name,
+              area: post.area,
+              body_good: post.body_good,
+              body_memo: post.body_memo,
+              post_images: post.post_images,
+            }}
+          />
       </div>
     </div>
   );
